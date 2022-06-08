@@ -1,0 +1,38 @@
+#!/bin/bash
+
+target=$1
+
+blue='\e[34m'
+green='\e[32m'
+clear='\e[0m'
+
+if [ ! -d $target ]
+then
+    echo -e "${green}Created a new directory named ---> ~/Desktop/bug_hunting/$target ${clear}"
+    mkdir /home/lucifer/Desktop/bug_hunting/$target
+fi
+
+cd /home/lucifer/Desktop/bug_hunting/$target
+
+echo -e "${green}[+]${clear} ${blue}Finding subdomains with Sublist3r tool and saving in subdomains.txt${clear}"
+python3 /home/lucifer/Desktop/tools/subwalker/tools/Sublist3r/sublist3r.py -d $target -t 16 -o subdomains.txt
+
+echo -e "${green}[+]${clear} ${blue}Finding subdomains with assetfinder tool and appending in subdomains.txt${clear}"
+/home/lucifer/Desktop/tools/subwalker/tools/assetfinder/assetfinder -subs-only $target >> subdomains.txt
+
+echo -e "${green}[+]${clear} ${blue}Sorting and removing duplicate results and saving in sorted_subdomains.txt${clear}"
+cat subdomains.txt | sort | uniq > sorted_subdomains.txt
+
+echo -e "${green}[+]${clear} ${blue}Finding alive domains with httprobe tool and saving result in alive_domains.txt${clear}"
+cat sorted_subdomains.txt | httprobe > alive_domains.txt
+
+echo -e "${green}[+]${clear} ${blue}Finding JS files and saving links in jsfiles${clear}"
+cat alive_domains.txt | subjs > jsfiles
+
+echo -e "${green}[+]${clear} ${blue}Fuzzing domains with dirsearch tool and storing result in directory_bruteforcing.txt${clear}"
+while read -r line
+do
+    dirsearch -u $line -w /usr/share/wordlists/dirb/common.txt -o /home/lucifer/Desktop/bug_hunting/$target/directory_bruteforcing.txt
+done <alive_domains.txt
+
+echo -e "${green}All tasks completed and exiting  process${clear}"
