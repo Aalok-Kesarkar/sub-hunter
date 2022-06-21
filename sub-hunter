@@ -41,7 +41,7 @@ cat alive_domains.txt | subjs >jsfiles
 
 echo -e "${green}[+]${clear} ${blue}Fuzzing domains with dirsearch tool and storing result in directory_bruteforcing.txt${clear}"
 while read -r line; do
-    dirsearch -u $line -w /usr/share/wordlists/dirb/common.txt -o /home/lucifer/Desktop/bug_hunting/$target/directory_bruteforcing.txt
+    dirsearch -u $line -w /usr/share/wordlists/dirb/common.txt -o /home/$(whoami)/Desktop/bug_hunting/$target/directory_bruteforcing.txt
 done <alive_domains.txt
 
 rm subdomains.txt
