@@ -11,14 +11,13 @@ blue='\e[34m'
 green='\e[32m'
 clear='\e[0m'
 
-if [ ! -d $target ]
-then
-    cd ~/Desktop/
-    if [ ! -d bug_hunting ]; then
-        mkdir bug_hunting
-        echo "[+] Created a new directory named bug_hunting, all your hunter reports will be stored here"
-        cd bug_hunting/
-    fi
+cd ~/Desktop/
+if [ ! -d bug_hunting ]; then
+    mkdir bug_hunting
+    echo "[+] Created a new directory named bug_hunting, all your hunter reports will be stored here"
+fi
+cd bug_hunting/
+if [ ! -d $target ]; then
     mkdir ~/Desktop/bug_hunting/$target
     echo -e "${green}Created a new directory named ---> ~/Desktop/bug_hunting/$target ${clear}"
 fi
@@ -29,24 +28,23 @@ echo -e "${green}[+]${clear} ${blue}Finding subdomains with Sublist3r tool and s
 python3 /home/$(whoami)/Desktop/tools/Sublist3r/sublist3r.py -d $target -t 16 -o subdomains.txt
 
 echo -e "${green}[+]${clear} ${blue}Finding subdomains with assetfinder tool and appending in subdomains.txt${clear}"
-assetfinder -subs-only $target >> subdomains.txt
+assetfinder -subs-only $target >>subdomains.txt
 
 echo -e "${green}[+]${clear} ${blue}Sorting and removing duplicate results and saving in sorted_subdomains.txt${clear}"
-cat subdomains.txt | sort | uniq > sorted_subdomains.txt
+cat subdomains.txt | sort | uniq >sorted_subdomains.txt
 
 echo -e "${green}[+]${clear} ${blue}Finding alive domains with httprobe tool and saving result in alive_domains.txt${clear}"
-cat sorted_subdomains.txt | httprobe > alive_domains.txt
+cat sorted_subdomains.txt | httprobe >alive_domains.txt
 
 echo -e "${green}[+]${clear} ${blue}Finding JS files and saving links in jsfiles${clear}"
-cat alive_domains.txt | subjs > jsfiles
+cat alive_domains.txt | subjs >jsfiles
 
 echo -e "${green}[+]${clear} ${blue}Fuzzing domains with dirsearch tool and storing result in directory_bruteforcing.txt${clear}"
-while read -r line
-do
+while read -r line; do
     dirsearch -u $line -w /usr/share/wordlists/dirb/common.txt -o /home/lucifer/Desktop/bug_hunting/$target/directory_bruteforcing.txt
 done <alive_domains.txt
 
 rm subdomains.txt
 
-echo -e "${green}Files saved in /home/$whoami/Desktop/bug_hunting/$target/   directory"
-echo -e "${green}All tasks completed and exiting process${clear}"
+echo -e "${green}Files saved in $pwd   directory"
+echo -e "${green}All tasks completed and exiting process.${clear}"

@@ -18,11 +18,6 @@ go install -v github.com/tomnomnom/assetfinder@latest
 
 echo -e "${green}[+] Downloading 'subjs' tool with 'go install'${clear}"
 go install -v github.com/lc/subjs@latest
-# git clone https://github.com/lc/subjs.git
-# cd ./subjs/
-# go build .
-# sudo mv subjs /usr/bin/
-# cd ..
 
 echo -e "${green}[+] Downloading 'Sublist3r' tool from github${clear}"
 git clone https://github.com/aboul3la/Sublist3r.git
