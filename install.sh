@@ -25,6 +25,12 @@ cd ./Sublist3r/
 sudo pip install -r requirements.txt
 cd ../
 
+echo -e "${green}[+] Downloading 'xnLinkFinder' tool from github${clear}"
+git clone https://github.com/xnl-h4ck3r/xnLinkFinder.git
+cd ./xnLinkFinder/
+sudo chmod 744 xnLinkFinder.py
+cd ../
+
 echo -e "${green}[+] Downloading 'httprobe' tool from apt repository${clear}"
 sudo apt install httprobe -y
 

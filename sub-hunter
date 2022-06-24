@@ -30,6 +30,9 @@ python3 /home/$(whoami)/Desktop/tools/Sublist3r/sublist3r.py -d $target -t 16 -o
 echo -e "${green}[+]${clear} ${blue}Finding subdomains with assetfinder tool and appending in subdomains.txt${clear}"
 assetfinder -subs-only $target >>subdomains.txt
 
+echo -e "${green}[+]${clear} ${blue}Crawling and finding endpoints with xnLinkFinder and appending in subdomains.txt${clear}"
+python3 /home/$(whoami)/Desktop/tools/xnLinkFinder/xnLinkFinder.py -i $target -o cli >> /home/$(whoami)/Desktop/bug_hunting/$target/subdomains.txt
+
 echo -e "${green}[+]${clear} ${blue}Sorting and removing duplicate results and saving in sorted_subdomains.txt${clear}"
 cat subdomains.txt | sort | uniq >sorted_subdomains.txt
 
